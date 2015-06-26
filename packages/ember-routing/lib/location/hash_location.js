@@ -111,13 +111,22 @@ export default EmberObject.extend({
     Ember.$(window).on(`hashchange.ember-location-${guid}`, () => {
       run(() => {
         var path = this.getURL();
-        if (get(this, 'lastSetURL') === path) { return; }
-
-        set(this, 'lastSetURL', null);
-
-        callback(path);
+        if (get(this, 'lastSetURL') !== path) {
+          callback(path);
+        }
       });
     });
+  },
+
+  /**
+    Restores the previous url.
+    Used when aborting a history.back() to correct wrong eager url update.
+
+    @private
+    @method restorePreviousURL
+  */
+  restorePreviousURL() {
+    this.setURL(get(this, 'lastSetURL'));
   },
 
   /**

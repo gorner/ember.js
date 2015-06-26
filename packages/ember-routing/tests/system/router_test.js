@@ -193,3 +193,34 @@ QUnit.test('Router#handleURL should remove any #hashes before doing URL transiti
 
   router.handleURL('/foo/bar?time=morphin#pink-power-ranger');
 });
+
+QUnit.test('Router should call location.restorePreviousURL if new URL entered and transition aborted', function() {
+  expect(1);
+
+  var router;
+  var FakeLocation = {
+    cancelRouterSetup: true,
+    create() { return this; },
+    restorePreviousURL() {
+      ok(true, 'restorePreviousURL should be called');
+    }
+  };
+
+  registry.register('location:fake', FakeLocation);
+
+  router = createRouter({
+    container: container,
+    location: 'fake'
+  });
+
+  router.router = {
+    handleURL(url) {
+      return {
+        isAborted: true,
+        then() {}
+      };
+    }
+  };
+
+  router.handleURL('/foo');
+});

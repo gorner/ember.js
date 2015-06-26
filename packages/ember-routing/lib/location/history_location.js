@@ -169,6 +169,17 @@ export default EmberObject.extend({
   },
 
   /**
+    Restores the previous url.
+    Used when aborting a history.back() to correct wrong eager url update.
+
+    @private
+    @method restorePreviousURL
+  */
+  restorePreviousURL() {
+    this.pushState(this._previousURL);
+  },
+
+  /**
     Register a callback to be invoked whenever the browser
     history changes, including using forward and back buttons.
 

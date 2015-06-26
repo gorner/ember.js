@@ -219,3 +219,18 @@ QUnit.test('HashLocation.willDestroy() cleans up hashchange event listener', fun
   // clean up
   Ember.$ = oldJquery;
 });
+
+QUnit.test('HashLocation.restorePreviousURL() restores the previous URL', function() {
+  expect(1);
+
+  createLocation({
+    _location: {
+      href: '/#/bar'
+    },
+    lastSetURL: '/foo'
+  });
+
+  location.restorePreviousURL();
+
+  equal(get(location, 'location.hash'), '/foo');
+});

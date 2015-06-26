@@ -216,3 +216,21 @@ QUnit.test('HistoryLocation.getURL() includes location.hash and location.search'
 
   equal(location.getURL(), '/foo/bar?time=morphin#pink-power-ranger');
 });
+
+QUnit.test('HashLocation.restorePreviousURL() restores the previous URL', function() {
+  expect(1);
+
+  HistoryTestLocation.reopen({
+    init() {
+      this._super.apply(this, arguments);
+      set(this, 'location', mockBrowserLocation('/bar'));
+      set(this, '_previousURL', '/foo');
+    }
+  });
+
+  createLocation();
+
+  location.restorePreviousURL();
+
+  equal(location._historyState.path, '/foo');
+});
